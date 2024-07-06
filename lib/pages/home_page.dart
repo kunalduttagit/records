@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
       
-            //Top Albums
+            //Top Artists
             Text("Top Artists", style: Theme.of(context).textTheme.headlineLarge,),
             Text("Popular artists from around the world", style: Theme.of(context).textTheme.headlineSmall,), 
       

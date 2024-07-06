@@ -5,8 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:record/models/album.dart';
 import 'package:record/models/artist.dart';
 import 'package:record/models/track.dart';
+import 'package:record/pages/album_showcase_page.dart';
+import 'package:record/pages/artist_showcase_page.dart';
 import 'package:record/pages/music_player.dart';
 import 'package:record/services/spotify_services.dart';
+
+//TODO: add tile wide tap support
 
 class SearchPage extends StatefulWidget {
   final SpotifyService spotifyService;
@@ -84,8 +88,8 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-    Widget _buildTrackItem(BuildContext context, Track track) {
-    return GestureDetector(
+  Widget _buildTrackItem(BuildContext context, Track track) {
+    return InkWell(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPlayer(track: track)));
       },
@@ -113,9 +117,9 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildArtistItem(BuildContext context, Artist artist) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-        // Handle artist tap
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistShowcasePage(artist: artist, spotifyService: widget.spotifyService,)));
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 6),
@@ -145,9 +149,9 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildAlbumItem(BuildContext context, Album album) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-        // Handle album tap
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AlbumShowcasePage(album: album, spotifyService: widget.spotifyService,)));
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 6),

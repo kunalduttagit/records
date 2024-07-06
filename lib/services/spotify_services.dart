@@ -111,4 +111,103 @@ class SpotifyService {
     }
   }
 
+  //Artist Top songs
+  Future<List<Track>> getTopSongs(String artistId, int topNSongs) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/artists/$artistId/top-tracks'),
+      headers: {
+        'Authorization': 'Bearer $_accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<dynamic> tracks = data['tracks'];
+      List<Track> songs = tracks.map((song) => Track.fromJson(song)).toList(); 
+
+      return songs.take(topNSongs).toList();
+    } else {
+      throw Exception("Failed to fetch top songs of artist: $response.statusCode");
+    }
+  }
+
+  Future<List<Album>> getTopArtistAlbums(String artistId) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/artists/$artistId/albums?include_groups=album&limit=10'),
+       headers: {
+        'Authorization': 'Bearer $_accessToken',
+      },
+    );
+
+    if(response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<dynamic> albums = data['items'];
+      List<Album> album = albums.map((album) => Album.fromJson(album)).toList();
+
+      return album;
+
+    } else {
+
+      throw Exception("Failed to fetch artist top albums $response.statusCode");
+    }
+  }
+
+  Future<List<Album>> getTopArtistSingles(String artistId) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/artists/$artistId/albums?include_groups=single&limit=10'),
+       headers: {
+        'Authorization': 'Bearer $_accessToken',
+      },
+    );
+
+    if(response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<dynamic> singles = data['items'];
+      List<Album> single = singles.map((single) => Album.fromJson(single)).toList();
+
+      return single;
+
+    } else {
+
+      throw Exception("Failed to fetch artist top albums $response.statusCode");
+    }
+  }
+
+  Future<List<AlbumTrack>> getAlbumTracks(String albumId) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/albums/$albumId/tracks'),
+      headers: {
+        'Authorization': 'Bearer $_accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<dynamic> trackList = data['items'];
+      List<AlbumTrack> tracks = trackList.map((track) => AlbumTrack.fromJson(track)).toList(); 
+
+      return tracks;
+    } else {
+      throw Exception("Failed to fetch tracks for given album: $response.statusCode");
+    }
+  }
+
+    Future<String> getCopyrights(String albumId) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/albums/$albumId'),
+      headers: {
+        'Authorization': 'Bearer $_accessToken',
+      },
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final String copyrights = data['copyrights'][0]['text'];
+    
+    return copyrights;
+  } else {
+    throw Exception('Failed to load album copyrights: ${response.statusCode}');
+  }
+
+  }
+
 }

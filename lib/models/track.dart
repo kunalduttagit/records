@@ -1,3 +1,5 @@
+import 'package:record/utils/format_time.dart';
+
 class Track {
   final String id;
   final String name;
@@ -31,4 +33,33 @@ class Track {
       trackImageUrl: json['album']['images'][0]['url'],
     );
   }
+}
+
+class AlbumTrack {
+  final String id;
+  final String name;
+  final int duration;
+  final List<String> artistNames;
+
+  AlbumTrack({
+    required this.id,
+    required this.name,
+    required this.duration,
+    required this.artistNames,
+  });
+
+  factory AlbumTrack.fromJson(Map<String, dynamic> json) {
+    return AlbumTrack(id: json['id'],
+      name: json['name'],
+      duration: json['duration_ms'],
+      artistNames: (json['artists'] as List<dynamic>)
+        .map((artist) => artist['name'] as String)
+        .toList(),
+    );
+  }
+}
+
+String getTotalDuration(List<AlbumTrack> tracks) {
+  int duration = tracks.fold(0, (sum, track) => sum + track.duration);
+  return formatDurationHours(duration);
 }

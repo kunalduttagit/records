@@ -20,27 +20,34 @@ class _MusicPlayerState extends State<MusicPlayer> {
   final player = AudioPlayer();
   Duration? duration;
   bool isPlaying = false;
+  bool _isPageMounted = false;
 
   @override
   void initState() {
+    _isPageMounted = true;
     super.initState();
     fetchAudioDataFromYoutube();
   }
 
   @override
   void dispose() {
+    _isPageMounted = false;
     player.dispose();
     super.dispose();
   }
 
   Future<void> fetchAudioDataFromYoutube() async {
+    if(!_isPageMounted) return; //Constant Checks to see if the player has closed to cancel assynchronous function calls
     try {
       final yt = YoutubeExplode();
       var results = await yt.search.search("${widget.track.name} ${widget.track.artistName} audio");
       final videoYtId = results.first.id;
+      if(!_isPageMounted) return;
       var manifest = await yt.videos.streamsClient.getManifest(videoYtId);
       // await player.play(UrlSource(manifest.audio.withHighestBitrate().url.toString()));
+      if(!_isPageMounted) return;
       await player.play(UrlSource(manifest.muxed.first.url.toString()));
+      if(!_isPageMounted) return;
       setState(() {
         duration = results.first.duration;
         isPlaying = true;
