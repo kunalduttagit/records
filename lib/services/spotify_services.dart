@@ -26,14 +26,21 @@ class SpotifyService {
     print(_accessToken);
   }
 
-  Future<Map<String, dynamic>> getArtist(String artistId) async {
+  Future<Artist> getArtist(String artistId) async {
     final response = await http.get(
       Uri.parse('$_baseUrl/artists/$artistId'),
       headers: {
         'Authorization': 'Bearer $_accessToken',
       },
     );
-    return json.decode(response.body);
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      final Artist artist = Artist.fromJson(jsonData);
+
+      return artist;
+    } else {
+      throw Exception('Failed to fetch artist');
+    }
   }
 
   Future<List<Artist>> getMultipleArtist(List<String> artistIds) async {
@@ -188,7 +195,7 @@ class SpotifyService {
 
       return tracks;
     } else {
-      throw Exception("Failed to fetch tracks for given album: $response.statusCode");
+      throw Exception("Failed to fetch tracks for given album: ${response.statusCode}");
     }
   }
 
@@ -204,10 +211,26 @@ class SpotifyService {
       final String copyrights = data['copyrights'][0]['text'];
     
     return copyrights;
-  } else {
-    throw Exception('Failed to load album copyrights: ${response.statusCode}');
+    } else {
+      throw Exception('Failed to load album copyrights: ${response.statusCode}');
+    }
   }
 
+  Future<List<MusicPlayerTrackList>> getMusicPlayerTrackRecommendations(artistId, trackId) async{
+      final response = await http.get(
+        Uri.parse('$_baseUrl/recommendations?seed_artists=$artistId&seed_tracks=$trackId'),
+        headers: {
+          'Authorization': 'Bearer $_accessToken',
+        },
+      );
+
+      if(response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body)['tracks'];
+        final List<MusicPlayerTrackList> tracks = data.map((track) => MusicPlayerTrackList.fromJson(track)).toList();
+        return tracks;
+      } else {
+        throw Exception('Failed to load recommended songs for music player ${response.statusCode}');
+      }
   }
 
 }

@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                       final track = _tracks[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPlayer(track: track)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPlayer(track: track, currSongIndex: 0, isAlbum: false, spotifyService: _spotifyService,)));
                         },
                         child: Container(
                           width: 160.0,

@@ -171,7 +171,7 @@ class _SingleShowcasePageState extends State<SingleShowcasePage> {
                       onTap: () async {
                         final trackFromAlbum = await widget.spotifyService.getTrack(track.id);
                         final tempTrack = Track.fromJson(trackFromAlbum);
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPlayer(track: tempTrack)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPlayer(track: tempTrack, currSongIndex: 0, isAlbum: true, albumTrackList: _tracks, album: widget.album, spotifyService: widget.spotifyService,)));
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 7),

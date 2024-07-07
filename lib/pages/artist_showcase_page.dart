@@ -101,7 +101,7 @@ class _ArtistShowcasePageState extends State<ArtistShowcasePage> {
         title: Text('', style: Theme.of(context).textTheme.titleMedium),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: BackButton(color: _backButtonColor),
+        leading: BackButton(),
         actions: [
           IconButton(onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage(spotifyService: widget.spotifyService)));
@@ -294,7 +294,7 @@ class _ArtistShowcasePageState extends State<ArtistShowcasePage> {
     return InkWell(
       onTap: () {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MusicPlayer(track: track)));
+            MaterialPageRoute(builder: (context) => MusicPlayer(track: track, currSongIndex: 0, isAlbum: false, spotifyService: widget.spotifyService,)));
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

@@ -5,9 +5,9 @@ class Track {
   final String name;
   final int duration;
   final String albumName;
-  final String albumUrl;
+  final String albumId;
   final String artistName;
-  final String artistUrl;
+  final String artistId;
   final String trackImageUrl;
 
   Track({
@@ -15,9 +15,9 @@ class Track {
     required this.name,
     required this.duration,
     required this.albumName,
-    required this.albumUrl,
+    required this.albumId,
     required this.artistName,
-    required this.artistUrl,
+    required this.artistId,
     required this.trackImageUrl,
   });
 
@@ -27,9 +27,9 @@ class Track {
       name: json['name'],
       duration: json['duration_ms'],
       albumName: json['album']['name'],
-      albumUrl: json['album']['external_urls']['spotify'],
+      albumId: json['album']['id'],
       artistName: json['artists'][0]['name'],
-      artistUrl: json['artists'][0]['external_urls']['spotify'],
+      artistId: json['artists'][0]['id'],
       trackImageUrl: json['album']['images'][0]['url'],
     );
   }
@@ -62,4 +62,33 @@ class AlbumTrack {
 String getTotalDuration(List<AlbumTrack> tracks) {
   int duration = tracks.fold(0, (sum, track) => sum + track.duration);
   return formatDurationHours(duration);
+}
+
+class MusicPlayerTrackList {
+  final String id;
+  final String name;
+  final String artistId;
+  final String artistName;
+  final int duration;
+  final String imageUrl;
+
+  MusicPlayerTrackList({
+    required this.id,
+    required this.name,
+    required this.artistId,
+    required this.artistName,
+    required this.duration,
+    required this.imageUrl,
+  });
+
+  factory MusicPlayerTrackList.fromJson(Map<String, dynamic> json) {
+    return MusicPlayerTrackList(
+      id: json['id'],
+      name: json['name'],
+      duration: json['duration_ms'],
+      artistName: json['artists'][0]['name'],
+      artistId: json['artists'][0]['id'],
+      imageUrl: json['album']['images'][0]['url'],
+    );
+  }
 }

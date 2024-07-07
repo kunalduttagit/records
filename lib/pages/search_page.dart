@@ -91,7 +91,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget _buildTrackItem(BuildContext context, Track track) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPlayer(track: track)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPlayer(track: track, currSongIndex: 0, isAlbum: false, spotifyService: widget.spotifyService,)));
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 6),
